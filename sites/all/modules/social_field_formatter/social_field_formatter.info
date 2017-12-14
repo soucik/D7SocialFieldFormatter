@@ -1,0 +1,3 @@
+name = Social Field Formatter
+description = Enables links formatting for Social field inside Company node.
+core = 7.x

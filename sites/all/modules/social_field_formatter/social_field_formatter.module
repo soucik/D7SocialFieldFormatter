@@ -1,0 +1,9 @@
+<?php
+/**
+ * HELP HOOK - Displays help and module information.
+ */
+function social_field_formatter_help($path, $arg) {
+	if ($path == 'admin/help#social_field_formatter') {
+		return '<p>' . t('Module rearrange view of values in Social field inside Company node. It adds icons to links pointing to social sites.'). '</p>';
+	}
+}
