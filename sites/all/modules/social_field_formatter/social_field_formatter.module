@@ -25,6 +25,52 @@ function social_field_formatter_field_formatter_info() {
 }
 
 /**
+* Implements hook_field_formatter_settings_form().
+*/
+function social_field_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+	$display = $instance['display'][$view_mode];
+	$settings = $display['settings'];
+	$element = array();
+
+	$element['type'] = array(
+		'#type' => 'select',
+		'#title' => t('Type'),
+		'#description' => t('Select what type of link will be shown.'),
+		'#default_value' => $settings['type'],
+		'#options' => array(
+			'icon' => 'Icon',
+			'text' => 'Text',
+			'both' => 'Both',
+		),
+	);
+
+	$element['size'] = array(
+		'#type' => 'select',
+		'#title' => t('Size'),
+		'#description' => t('Select what size of social icon will be used.'),
+		'#default_value' => $settings['size'],
+		'#options' => array(
+			'default' => 'Default',
+			'large' => 'Large',
+		),
+	);
+	return $element;
+}
+
+/**
+* hook_field_formatter_settings_summary
+*/
+function social_field_formatter_field_formatter_settings_summary($field, $instance, $view_mode) {
+	$display = $instance['display'][$view_mode];
+	$settings = $display['settings'];
+	$summary = t('Use a @type link option for link type with the icon size of "@size"', array(
+		'@type' => $settings['type'],
+		'@size' => $settings['size']
+	));
+	return $summary;
+}
+
+/**
 * Implements hook_field_formatter_view().
 */
 function social_field_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
