@@ -7,3 +7,30 @@ function social_field_formatter_help($path, $arg) {
 		return '<p>' . t('Module rearrange view of values in Social field inside Company node. It adds icons to links pointing to social sites.'). '</p>';
 	}
 }
+
+/**
+* Implements hook_field_formatter_info().
+*/
+function social_field_formatter_field_formatter_info() {
+	return array(
+	'social_field_formatter_formatter' => array( 
+		'label' => t('Social field'),
+		'field types' => array('text'),
+		'settings' => array(
+			'type' => 'icon',
+			'size' => 'default'
+			),
+		),
+	);
+}
+
+/**
+* Implements hook_field_formatter_view().
+*/
+function social_field_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+	$element = array();
+	foreach ($items as $delta => $item) {
+		$element[$delta] = array('#markup' =>'<i class="fa fa-facebook" aria-hidden="true"></i> '.$item['safe_value']);
+	}
+	return $element;
+}
