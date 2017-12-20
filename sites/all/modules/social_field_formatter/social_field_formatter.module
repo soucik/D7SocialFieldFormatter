@@ -30,7 +30,34 @@ function social_field_formatter_field_formatter_info() {
 function social_field_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
 	$element = array();
 	foreach ($items as $delta => $item) {
-		$element[$delta] = array('#markup' =>'<i class="fa fa-facebook" aria-hidden="true"></i> '.$item['safe_value']);
+		$font_awesome_social_class = '';
+		$social_domain_name = _parse_link_domain($item['safe_value']);
+		
+		switch($social_domain_name){
+			case 'facebook':
+				$font_awesome_social_class = "fa fa-facebook";
+				break;
+			case 'linkedin':
+				$font_awesome_social_class = "fa fa-linkedin";
+				break;
+			case 'google':
+				$font_awesome_social_class = "fa fa-google-plus";
+				break;
+			default:
+				$font_awesome_social_class = "fa fa-globe";
+				break;
+		}
+		$element[$delta] = array('#markup' =>'<i class="'.$font_awesome_social_class.'" aria-hidden="true"></i> '.$item['safe_value']);
 	}
 	return $element;
+}
+
+function _parse_link_domain($link){
+	$particular_link = preg_replace('#^https?://#', '', $link); //remove http://, https://
+	$particular_link = preg_replace('#^www.#', '', $particular_link); //remove www.
+	$iPosition = strpos($particular_link, '.com'); //remove characters from beggining .com
+	if ($iPosition !== false)
+		return substr($particular_link, 0, $iPosition);
+	else
+		return $particular_link;
 }
