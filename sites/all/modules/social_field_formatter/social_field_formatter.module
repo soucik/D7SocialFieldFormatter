@@ -33,17 +33,17 @@ function social_field_formatter_field_formatter_settings_form($field, $instance,
 	$element = array();
 
 	$element['type'] = array(
-		'#type' => 'select',
+		'#type' => 'radios',
 		'#title' => t('Type'),
 		'#description' => t('Select what type of link will be shown.'),
 		'#default_value' => $settings['type'],
 		'#options' => array(
-			'icon' => 'Icon',
-			'text' => 'Text',
-			'both' => 'Both',
+			'icon' => t('Icon'),
+			'text' => t('Text'),
+			'both' => t('Both'),
 		),
 	);
-
+	
 	$element['size'] = array(
 		'#type' => 'select',
 		'#title' => t('Size'),
@@ -52,6 +52,11 @@ function social_field_formatter_field_formatter_settings_form($field, $instance,
 		'#options' => array(
 			'default' => 'Default',
 			'large' => 'Large',
+		),
+		'#states' => array(
+			'visible' => array(
+				':input[name="type"]' => array('value' => 'both'),
+			),
 		),
 	);
 	return $element;
