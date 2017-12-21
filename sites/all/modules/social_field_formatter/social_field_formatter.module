@@ -77,27 +77,48 @@ function social_field_formatter_field_formatter_view($entity_type, $entity, $fie
 	$element = array();
 	$settings = $display['settings'];
 	$icons_size_class = ($settings['size'] == 'large')? 'fa-2x':'fa-lg';
-	foreach ($items as $delta => $item) {
-		$font_awesome_social_class = '';
-		$social_domain_name = _parse_link_domain($item['safe_value']);
 
-		switch($social_domain_name){
-			case 'facebook':
-				$font_awesome_social_class = "fa fa-facebook";
-				break;
-			case 'linkedin':
-				$font_awesome_social_class = "fa fa-linkedin";
-				break;
-			case 'google':
-				$font_awesome_social_class = "fa fa-google-plus";
-				break;
-			default:
-				$font_awesome_social_class = "fa fa-globe";
-				break;
+	switch($settings['type'])
+	{
+	case 'text':
+		foreach ($items as $delta => $item) {
+			$item_link_social = $item['safe_value'];
+			$prefix_link_social = '<a href ="'.$item_link_social.'">';
+			$element[$delta] = array(
+				'#prefix' => $prefix_link_social,
+				'#markup' => $item_link_social,
+				'#suffix' => '</a>');
 		}
-		$element[$delta] = array('#markup' =>'<i class="'.$font_awesome_social_class.' '.$icons_size_class.'" aria-hidden="true"></i> '.$item['safe_value']);
+		break;
+	case 'both':
+		$icons_size_class = 'fa-lg';
+		foreach ($items as $delta => $item) {
+			$item_link_social = $item['safe_value'];
+			$prefix_link_social = '<a href ="'.$item_link_social.'">';
+			$font_awesome_social_class = _attach_icon($item_link_social, $icons_size_class);
+			$item_link_social = '<i class="'.$font_awesome_social_class.'" aria-hidden="true"></i> '.$item['safe_value'];
+			$element[$delta] = array(
+				'#prefix' => $prefix_link_social,
+				'#markup' => $item_link_social,
+				'#suffix' => '</a>');
+		}
+		break;
+	
+	case 'icon':
+		foreach ($items as $delta => $item) {
+			$item_link_social = $item['safe_value'];
+			$prefix_link_social = '<a href ="'.$item_link_social.'">';
+			$font_awesome_social_class = _attach_icon($item_link_social, $icons_size_class);
+			$item_link_social = '<i class="'.$font_awesome_social_class.'" aria-hidden="true"></i>';
+			$element[$delta] = array(
+				'#prefix' => $prefix_link_social,
+				'#markup' => $item_link_social,
+				'#suffix' => '</a>');
+		}
+	break;
 	}
-	return $element;
+	
+return $element;
 }
 
 function _parse_link_domain($link){
@@ -108,4 +129,24 @@ function _parse_link_domain($link){
 		return substr($particular_link, 0, $iPosition);
 	else
 		return $particular_link;
+}
+
+function _attach_icon($item_link_social, $icon_size_class){
+		$font_awesome_social_class = '';
+		$social_domain_name = _parse_link_domain($item_link_social);
+		switch($social_domain_name){
+		case 'facebook':
+			$font_awesome_social_class = "fa fa-facebook";
+			break;
+		case 'linkedin':
+			$font_awesome_social_class = "fa fa-linkedin";
+			break;
+		case 'google':
+			$font_awesome_social_class = "fa fa-google-plus";
+			break;
+		default:
+			$font_awesome_social_class = "fa fa-globe";
+			break;
+		}
+	return $font_awesome_social_class.' '.$icon_size_class; 
 }
