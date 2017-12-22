@@ -77,17 +77,14 @@ function social_field_formatter_field_formatter_view($entity_type, $entity, $fie
 	$element = array();
 	$settings = $display['settings'];
 	$icons_size_class = ($settings['size'] == 'large')? 'fa-2x':'fa-lg';
-
+	$suffix_link_social = '</a>';
 	switch($settings['type'])
 	{
 	case 'text':
 		foreach ($items as $delta => $item) {
 			$item_link_social = $item['safe_value'];
 			$prefix_link_social = '<a href ="'.$item_link_social.'">';
-			$element[$delta] = array(
-				'#prefix' => $prefix_link_social,
-				'#markup' => $item_link_social,
-				'#suffix' => '</a>');
+			$element[$delta] = _make_link($prefix_link_social, $item_link_social, $suffix_link_social);
 		}
 		break;
 	case 'both':
@@ -97,28 +94,20 @@ function social_field_formatter_field_formatter_view($entity_type, $entity, $fie
 			$prefix_link_social = '<a href ="'.$item_link_social.'">';
 			$font_awesome_social_class = _attach_icon($item_link_social, $icons_size_class);
 			$item_link_social = '<i class="'.$font_awesome_social_class.'" aria-hidden="true"></i> '.$item['safe_value'];
-			$element[$delta] = array(
-				'#prefix' => $prefix_link_social,
-				'#markup' => $item_link_social,
-				'#suffix' => '</a>');
+			$element[$delta] = _make_link($prefix_link_social, $item_link_social, $suffix_link_social);
 		}
 		break;
-	
 	case 'icon':
 		foreach ($items as $delta => $item) {
 			$item_link_social = $item['safe_value'];
 			$prefix_link_social = '<a href ="'.$item_link_social.'">';
 			$font_awesome_social_class = _attach_icon($item_link_social, $icons_size_class);
 			$item_link_social = '<i class="'.$font_awesome_social_class.'" aria-hidden="true"></i>';
-			$element[$delta] = array(
-				'#prefix' => $prefix_link_social,
-				'#markup' => $item_link_social,
-				'#suffix' => '</a>');
+			$element[$delta] = _make_link($prefix_link_social, $item_link_social, $suffix_link_social);
 		}
-	break;
+		break;
 	}
-	
-return $element;
+	return $element;
 }
 
 function _parse_link_domain($link){
@@ -141,7 +130,7 @@ function _attach_icon($item_link_social, $icon_size_class){
 		case 'linkedin':
 			$font_awesome_social_class = "fa fa-linkedin";
 			break;
-		case 'google':
+		case 'plus.google':
 			$font_awesome_social_class = "fa fa-google-plus";
 			break;
 		default:
@@ -149,4 +138,11 @@ function _attach_icon($item_link_social, $icon_size_class){
 			break;
 		}
 	return $font_awesome_social_class.' '.$icon_size_class; 
+}
+
+function _make_link($prefix_link_social, $item_link_social, $suffix_link_social){
+	return array(
+		'#prefix' => $prefix_link_social,
+		'#markup' => $item_link_social,
+		'#suffix' => $suffix_link_social);
 }
